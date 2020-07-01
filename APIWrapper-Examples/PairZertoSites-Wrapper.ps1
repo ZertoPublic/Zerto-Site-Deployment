@@ -7,8 +7,8 @@
 $ZertoUserName = "GOES HERE" # Enter the ZVM username
 $ZertoPassword = "GOES HERE" | ConvertTo-SecureString -AsPlainText  # Enter the ZVM Password
 $ZertoCredentials = [PSCredential]::New($ZertoUserName, $ZertoPassword)
-$ZertoServerSource = "GOES HERE" # Enter the hostname or IP address of your source side ZVM
-$ZertoServerTarget = "GOES HERE" # Enter the hostname or IP address of your destination side ZVM
+$ZertoServerSource = "GOES HERE" # Enter the hostname or IP address of your source ZVM
+$ZertoServerTarget = "GOES HERE" # Enter the hostname or IP address of your target ZVM
 $ZertoPortSource = "9669" # Only Update if using a Nonstandard port.
 $ZertoPortTarget = "9669" # Only Update if using a Nonstandard port.
 $ZertoPairingPort = "9071"  # Only Update if using a Nonstandard port.
