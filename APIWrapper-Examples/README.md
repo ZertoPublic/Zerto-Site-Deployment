@@ -3,10 +3,10 @@
 This repository consists of the following example scripts designed to deploy and configure a new Zerto installation. These examples leverage the ZertoAPIWrapper and PowerShell Core.
 
 
-# LicenseZVM-Wrapper.ps1
+## LicenseZVM-Wrapper.ps1
 This script will apply a specified license key to a Zerto Virtual Manager (ZVM).
 
-## Prerequisites
+### Prerequisites
 
 Environment Requirements:
 
@@ -19,7 +19,7 @@ Script Requirements:
 - ZVM ServerName/IP & Port
 - Username and password with permission to access the API of the ZVM
 
-## Running Script
+### Running Script
 
 Once the necessary requirements have been completed select an appropriate host to run the script from. To run the script type the following:
 
@@ -27,11 +27,11 @@ Once the necessary requirements have been completed select an appropriate host t
 
 
 
-# PairZertoSites-Wrapper.ps1
+## PairZertoSites-Wrapper.ps1
 
 This script will pair Source and Target Zerto Virtual Managers (ZVMs).
 
-## Prerequisites
+### Prerequisites
 
 Environment Requirements:
 
@@ -46,7 +46,7 @@ Script Requirements:
 - Pairing Port (if not the default)
 - Username and password with permission to access the API of the source and target ZVMs
 
-## Running Script
+### Running Script
 
 Once the necessary requirements have been completed select an appropriate host to run the script from. To run the script type the following:
 
@@ -54,11 +54,11 @@ Once the necessary requirements have been completed select an appropriate host t
 
 
 
-# BulkVRADeployment-Wrapper.ps1
+## BulkVRADeployment-Wrapper.ps1
 
 This script automates the deployment of VRAs based on the hosts in the specified CSV file using the Zerto API. The CSV is required to be filled out   before running the script in order to utilize the necessary vCenter resources when creating the VRAs. Please note this script is intended to be used only with ESXi hosts 5.5 and newer. The script doesn't call for a host root password and is instead using the Zerto VRA VIB deployment that was introduced in ZVR 4.5.
 
-## Prerequisites
+### Prerequisites
 
 Environment Requirements:
 
@@ -73,7 +73,7 @@ Script Requirements:
 - BulkVRADeployment.csv required info completed
 - BulkVRADeployment.csv accessible by host running script
 
-## Running Script
+### Running Script
 
 Once the necessary requirements have been completed select an appropriate host to run the script from. To run the script type the following:
 
