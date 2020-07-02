@@ -1,0 +1,5 @@
+ZVMName,ESXiHostName,DatastoreName,PortGroupName,VRAGroupName,MemoryInGB,DefaultGateway,SubnetMask,VRAIPAddress
+zvm1.domain.name,host1.domain.name,Datastore1,Network1,Site01,3,x.x.x.x,x.x.x.x,x.x.x.x
+zvm1.domain.name,host2.domain.name,Datastore2,Network1,Site01,3,x.x.x.x,x.x.x.x,x.x.x.x
+zvm2.domain.name,host1.domain.name,Datastore1,Network1,Site02,3,x.x.x.x,x.x.x.x,x.x.x.x
+zvm2.domain.name,host2.domain.name,Datastore2,Network1,Site02,3,x.x.x.x,x.x.x.x,x.x.x.x

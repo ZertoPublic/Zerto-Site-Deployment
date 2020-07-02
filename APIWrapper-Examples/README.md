@@ -2,10 +2,11 @@
 
 This repository consists of the following example scripts designed to deploy and configure a new Zerto installation.
 
-- AuthenticateToZVM.ps1 - This script will authenticate you to a specified Zerto Virtual Manager (ZVM) and provide you with the x-zerto-session header that will be required in subsequent commands as a header value for authentication validation.
 - LicenseZVM.ps1 - This script will apply a specified license key to a Zerto Virtual Manager (ZVM).
 - PairZertoSites.ps1 - This script will pair Source and Target Zerto Virtual Managers (ZVMs).
 - BulkVRADeployment.ps1 - This script automates the deployment of VRAs based on the hosts in the specified CSV file using the Zerto API. The CSV is required to be filled out before running the script in order to utilize the necessary vCenter resources when creating the VRAs. Please note this script is intended to be used only with ESXi hosts 5.5 and newer. The script doesn't call for a host root password and is instead using the Zerto VRA VIB deployment that was introduced in ZVR 4.5.
+
+Note: Due to the ease of use of the "Connect-ZertoServer" function, we are not including an AuthenticateToZVM example as we did for the native API examples.
 
 ## Legal Disclaimer
 
