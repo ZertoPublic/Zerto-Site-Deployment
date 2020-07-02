@@ -11,6 +11,7 @@ This script will apply a specified license key to a Zerto Virtual Manager (ZVM).
 Environment Requirements:
 
 - PowerShell Core
+- Zerto API Wrapper PowerShell Module (https://github.com/ZertoPublic/ZertoApiWrapper)
 - Zerto 6.5+
 
 Script Requirements:
@@ -36,6 +37,7 @@ This script will pair Source and Target Zerto Virtual Managers (ZVMs).
 Environment Requirements:
 
 - PowerShell Core
+- Zerto API Wrapper PowerShell Module (https://github.com/ZertoPublic/ZertoApiWrapper)
 - Zerto 6.5+
 
 Script Requirements:
@@ -63,6 +65,7 @@ This script automates the deployment of VRAs based on the hosts in the specified
 Environment Requirements:
 
 - PowerShell Core
+- Zerto API Wrapper PowerShell Module (https://github.com/ZertoPublic/ZertoApiWrapper)
 - Zerto 6.5+
 - vSphere 5.5+
 - Network access to the Zerto Virtual Manager(s) (ZVMs), use the target site ZVM for storage info to be populated
