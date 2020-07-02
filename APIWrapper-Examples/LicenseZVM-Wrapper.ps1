@@ -1,4 +1,5 @@
 #Requires -PSEdition Core
+#Requires -Module ZertoApiWrapper
 
 #--------------------------------------------------------------------------------------------------------------#
 # Configure the variables below
