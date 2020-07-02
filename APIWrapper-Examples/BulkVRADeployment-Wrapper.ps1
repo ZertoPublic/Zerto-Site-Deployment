@@ -25,33 +25,32 @@ $ZVMName = $ESXiHostCSVImport | Select-Object ZVMName -Unique
 
 foreach ($ZVM in $ZVMName) {
 
-    # Establishes a connection to a ZVM
-    Connect-ZertoServer -zertoServer $ZVM.ZVMName -zertoPort $ZertoPort -credential $ZertoCredentials
+# Establishes a connection to a ZVM
+Connect-ZertoServer -zertoServer $ZVM.ZVMName -zertoPort $ZertoPort -credential $ZertoCredentials
 
-    #--------------------------------------------------------------------------------------------------------------#
-    #  Install Zerto VRA to each host specified in the imported CSV file
-    #--------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------------------#
+#  Install Zerto VRA to each host specified in the imported CSV file
+#--------------------------------------------------------------------------------------------------------------#
 
-    foreach ($ESXiHostName in $ESXiHostCSVImport) {
+$HostVras = $ESXiHostCSVImport | Where-Object { $_.ZVMName -like $ZVM.ZVMName }
+foreach ($VRA in $HostVras) {
 
-        # Defining VRA Settings to use
-        $VRASettings = @{
-            hostName       = $ESXiHostName.ESXiHostName
-            datastoreName  = $ESXiHostName.DatastoreName
-            networkName    = $ESXiHostName.PortGroupName
-            groupName      = $ESXiHostName.VRAGroupName
-            memoryInGB     = $ESXiHostName.MemoryInGB
-            vraIpAddress   = $ESXiHostName.VRAIPAddress
-            subnetMask     = $ESXiHostName.SubnetMask
-            defaultGateway = $ESXiHostName.DefaultGateway
-        }
-
-        # Installing VRA on each host specified in the imported CSV file using defined settings
-        Install-ZertoVra @VRASettings
-
+    # Defining VRA Settings to use
+    $VRASettings = @{
+    hostName       = $VRA.ESXiHostName
+    datastoreName  = $VRA.DatastoreName
+    networkName    = $VRA.PortGroupName
+    groupName      = $VRA.VRAGroupName
+    memoryInGB     = $VRA.MemoryInGB
+    vraIpAddress   = $VRA.VRAIPAddress
+    subnetMask     = $VRA.SubnetMask
+    defaultGateway = $VRA.DefaultGateway
     }
 
-    Start-Sleep -Seconds 15
+    # Installing VRA on each host specified in the imported CSV file using defined settings
+    Install-ZertoVra @VRASettings
+
+    }
 
 }
 
