@@ -2,9 +2,11 @@
 
 This repository consists of the following example scripts designed to deploy and configure a new Zerto installation. There are two groups of examples.
 
-***API-Examples*** - Leverages the Zerto REST APIs and PowerShell Core.
+###### ***API-Examples***
+Leverages the Zerto REST APIs and PowerShell Core.
 
-***APIWrapper-Examples*** - Leverages the ZertoAPIWrapper and PowerShell Core.
+###### ***APIWrapper-Examples***
+Leverages the ZertoAPIWrapper and PowerShell Core.
 
 - **AuthenticateToZVM.ps1 (API Only)** - This script will authenticate you to a specified Zerto Virtual Manager (ZVM) and provide you with the x-zerto-session header that will be required in subsequent commands as a header value for authentication validation.
 - **LicenseZVM.ps1** - This script will apply a specified license key to a Zerto Virtual Manager (ZVM).
