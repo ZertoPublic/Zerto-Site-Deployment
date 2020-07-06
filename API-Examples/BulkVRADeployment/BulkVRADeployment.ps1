@@ -1,4 +1,5 @@
 #Requires -PSEdition Core
+
 <#
 .SYNOPSIS
    This script automates the deployment of VRAs for the hosts in the specified CSV file using the Zerto API to complete the process
@@ -29,109 +30,121 @@ performance of the sample scripts and documentation remains with you.
 # Configure the variables below
 ###################################################################################################################
 $ESXiHostCSV = ".\BulkVRADeployment.csv"
-$ZertoServer = "GOES HERE"  # Enter the Hostname/IP of the Zerto Virtual Manager (ZVM) to connect to
 $ZertoPort = "9669" # Only Update if using a Nonstandard port.
 $ZertoUserName = "GOES HERE"    # Enter the ZVM username
 $ZertoPassword = "GOES HERE" | ConvertTo-SecureString -AsPlainText  # Enter the ZVM Password
 $ZertoCredentials = [PSCredential]::New($ZertoUserName, $ZertoPassword)
 
-#--------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Nothing to configure below this line
-#--------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
-#--------------------------------------------------------------------------------------------------------------#
-# Building Zerto API string and invoking API
-#--------------------------------------------------------------------------------------------------------------#
-$baseURL = "https://" + $ZertoServer + ":" + $ZertoPort + "/v1/"
-# Authenticating with Zerto APIs
-$ZertoHeaders = @{
-    Accept = 'application/json'
-}
-$RestMethodParameters = @{
-    Headers                 = $ZertoHeaders
-    ContentType             = 'application/json'
-    ResponseHeadersVariable = 'ReturnHeaders'
-    StatusCodeVariable      = 'ReturnStatusCode'
-    SkipCertificateCheck    = $true
-}
-$URI = $baseURL + 'session/add'
-Try {
-    $null = Invoke-RestMethod @RestMethodParameters -Method "POST" -URI $URI -Credential $ZertoCredentials
-} Catch {
-    Write-Host $_.Exception.ToString()
-    $error[0] | Format-List -Force
-}
-
-#Extracting x-zerto-session from the response, and adding it to the actual API
-$ZertoHeaders['x-zerto-session'] = $ReturnHeaders.'x-zerto-session'[0]
-
-# Get SiteIdentifier for getting required resource identifiers
-$URI = $BaseURL + "localsite"
-$SiteIdentifier = (Invoke-RestMethod @RestMethodParameters -Uri $URI).SiteIdentifier
-
-# Get Site Networks for name to identifier translation
-$URI = "{0}{1}/{2}/{3}" -f $baseURL, "virtualizationsites", $SiteIdentifier, 'networks'
-$SiteNetworks = Invoke-RestMethod @RestMethodParameters -Uri $URI
-$NetworksMap = @{ }
-foreach ($network in $SiteNetworks) {
-    $NetworksMap.Add($network.VirtualizationNetworkName, $network.NetworkIdentifier)
-}
-
-# Get Site Hosts for name to identifier translation
-$URI = "{0}{1}/{2}/{3}" -f $baseURL, "virtualizationsites", $SiteIdentifier, 'hosts'
-$SiteHosts = Invoke-RestMethod @RestMethodParameters  -Uri $URI
-$HostsMap = @{ }
-foreach ($esxHost in $SiteHosts) {
-    $HostsMap.Add($esxHost.VirtualizationHostName, $esxHost.HostIdentifier)
-}
-
-# Get Site datastores for name to identifier translation
-$URI = "{0}{1}/{2}/{3}" -f $baseURL, "virtualizationsites", $SiteIdentifier, 'datastores'
-$SiteDatastores = Invoke-RestMethod @RestMethodParameters  -Uri $URI
-$DatastoresMap = @{ }
-foreach ($ds in $SiteDatastores) {
-    $DatastoresMap.Add($ds.DatastoreName, $ds.DatastoreIdentifier)
-}
-
-#--------------------------------------------------------------------------------------------------------------#
-# Importing the CSV of ESXi hosts to deploy VRA to
-#--------------------------------------------------------------------------------------------------------------#
+# Import configuration data from csv file defined in $ESXiHostCSV above
 $ESXiHostCSVImport = Import-Csv $ESXiHostCSV
 
-#--------------------------------------------------------------------------------------------------------------#
-# Starting Install Process for each ESXi host specified in the CSV
-#--------------------------------------------------------------------------------------------------------------#
-$URI = $BaseURL + 'vras'
-foreach ($ESXiHost in $ESXiHostCSVImport) {
-    # Creating JSON Body for API settings
-    $RequestBody = @{
-        DatastoreIdentifier              = $DatastoresMap[$ESXiHost.DatastoreName]
-        GroupName                        = $ESXiHost.VRAGroupName
-        HostIdentifier                   = $HostsMap[$ESXiHost.ESXiHostName]
-        MemoryInGb                       = $ESXiHost.MemoryInGB
-        NetworkIdentifier                = $NetworksMap[$ESXiHost.PortGroupName]
-        UsePublicKeyInsteadOfCredentials = $true
-        VraNetworkDataApi                = @{
-            DefaultGateway            = $ESXiHost.DefaultGateway
-            SubnetMask                = $ESXiHost.SubnetMask
-            VraIPAddress              = $ESXiHost.VRAIPAddress
-            VraIPConfigurationTypeApi = "Static"
-        }
-    }
+# Identify Unique Zerto Virtual Managers from CSV file
+$ZVMName = $ESXiHostCSVImport | Select-Object ZVMName -Unique
 
-    Write-Verbose "Executing $($RequestBody | ConvertTo-Json)"
-    # Now trying API install cmd
+foreach ($ZVM in $ZVMName) {
+
+    #-------------------------------------------------------------------------------#
+    # Building Zerto API string and invoking API
+    #-------------------------------------------------------------------------------#
+
+    $ZertoServer = $ZVM.ZVMName
+    $baseURL = "https://" + $ZertoServer + ":" + $ZertoPort + "/v1/"
+
+    # Authenticating with Zerto APIs
+    $ZertoHeaders = @{
+        Accept = 'application/json'
+    }
+    $RestMethodParameters = @{
+        Headers                 = $ZertoHeaders
+        ContentType             = 'application/json'
+        ResponseHeadersVariable = 'ReturnHeaders'
+        StatusCodeVariable      = 'ReturnStatusCode'
+        SkipCertificateCheck    = $true
+    }
+    $URI = $baseURL + 'session/add'
     Try {
-        Invoke-RestMethod @RestMethodParameters -URI $URI -Method POST -Body ($RequestBody | ConvertTo-Json)
+        $null = Invoke-RestMethod @RestMethodParameters -Method "POST" -URI $URI -Credential $ZertoCredentials
     } Catch {
         Write-Host $_.Exception.ToString()
         $error[0] | Format-List -Force
     }
-    # Waiting 30 seconds before deploying the next VRA
-    Write-Verbose "Waiting 30 seconds before deploying the next VRA"
-    Start-Sleep -Seconds 30
-    # End of per Host operations below
+
+    #Extracting x-zerto-session from the response, and adding it to the actual API
+    $ZertoHeaders['x-zerto-session'] = $ReturnHeaders.'x-zerto-session'[0]
+
+    # Get SiteIdentifier for getting required resource identifiers
+    $URI = $BaseURL + "localsite"
+    $SiteIdentifier = (Invoke-RestMethod @RestMethodParameters -Uri $URI).SiteIdentifier
+
+    # Get Site Networks for name to identifier translation
+    $URI = "{0}{1}/{2}/{3}" -f $baseURL, "virtualizationsites", $SiteIdentifier, 'networks'
+    $SiteNetworks = Invoke-RestMethod @RestMethodParameters -Uri $URI
+    $NetworksMap = @{ }
+    foreach ($network in $SiteNetworks) {
+        $NetworksMap.Add($network.VirtualizationNetworkName, $network.NetworkIdentifier)
+    }
+
+    # Get Site Hosts for name to identifier translation
+    $URI = "{0}{1}/{2}/{3}" -f $baseURL, "virtualizationsites", $SiteIdentifier, 'hosts'
+    $SiteHosts = Invoke-RestMethod @RestMethodParameters  -Uri $URI
+    $HostsMap = @{ }
+    foreach ($esxHost in $SiteHosts) {
+        $HostsMap.Add($esxHost.VirtualizationHostName, $esxHost.HostIdentifier)
+    }
+
+    # Get Site datastores for name to identifier translation
+    $URI = "{0}{1}/{2}/{3}" -f $baseURL, "virtualizationsites", $SiteIdentifier, 'datastores'
+    $SiteDatastores = Invoke-RestMethod @RestMethodParameters  -Uri $URI
+    $DatastoresMap = @{ }
+    foreach ($ds in $SiteDatastores) {
+        $DatastoresMap.Add($ds.DatastoreName, $ds.DatastoreIdentifier)
+    }
+
+    #------------------------------------------------------------------------------#
+    # Install Zerto VRA to each host specified in the imported CSV file
+    #------------------------------------------------------------------------------#
+
+    $HostVras = $ESXiHostCSVImport | Where-Object { $_.ZVMName -like $ZVM.ZVMName }
+    foreach ($VRA in $HostVras) {
+
+        $URI = $BaseURL + 'vras'
+
+        # Creating JSON Body for API settings
+        $RequestBody = @{
+            DatastoreIdentifier              = $DatastoresMap[$VRA.DatastoreName]
+            GroupName                        = $VRA.VRAGroupName
+            HostIdentifier                   = $HostsMap[$VRA.ESXiHostName]
+            MemoryInGb                       = $VRA.MemoryInGB
+            NetworkIdentifier                = $NetworksMap[$VRA.PortGroupName]
+            UsePublicKeyInsteadOfCredentials = $true
+            VraNetworkDataApi                = @{
+                DefaultGateway            = $VRA.DefaultGateway
+                SubnetMask                = $VRA.SubnetMask
+                VraIPAddress              = $VRA.VRAIPAddress
+                VraIPConfigurationTypeApi = "Static"
+            }
+        }
+
+        Write-Verbose "Executing $($RequestBody | ConvertTo-Json)"
+
+        # Trying API installation command
+        Try {
+            Invoke-RestMethod @RestMethodParameters -URI $URI -Method POST -Body ($RequestBody | ConvertTo-Json)
+        } Catch {
+            Write-Host $_.Exception.ToString()
+            $error[0] | Format-List -Force
+        }
+
+        # End of per Host operations below
+
+    }
+
+    # Remove the Session from the ZVM
+    $URI = $baseURL + 'Session'
+    $null = Invoke-RestMethod @RestMethodParameters -Uri $URI -Method DELETE
+
 }
-# Remove the Session from the ZVM
-$URI = $baseURL + 'Session'
-$null = Invoke-RestMethod @RestMethodParameters -Uri $URI -Method DELETE
