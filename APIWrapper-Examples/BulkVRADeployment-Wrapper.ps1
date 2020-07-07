@@ -49,32 +49,32 @@ $ZVMName = $ESXiHostCSVImport | Select-Object ZVMName -Unique
 
 foreach ($ZVM in $ZVMName) {
 
-# Establishes a connection to a ZVM
-Connect-ZertoServer -zertoServer $ZVM.ZVMName -zertoPort $ZertoPort -credential $ZertoCredentials
+   # Establishes a connection to a ZVM
+   Connect-ZertoServer -zertoServer $ZVM.ZVMName -zertoPort $ZertoPort -credential $ZertoCredentials
 
-#--------------------------------------------------------------------------------------------------------------#
-#  Install Zerto VRA to each host specified in the imported CSV file
-#--------------------------------------------------------------------------------------------------------------#
+   #--------------------------------------------------------------------------------------------------------------#
+   #  Install Zerto VRA to each host specified in the imported CSV file
+   #--------------------------------------------------------------------------------------------------------------#
 
-$HostVras = $ESXiHostCSVImport | Where-Object { $_.ZVMName -like $ZVM.ZVMName }
-foreach ($VRA in $HostVras) {
+   $HostVras = $ESXiHostCSVImport | Where-Object { $_.ZVMName -like $ZVM.ZVMName }
+   foreach ($VRA in $HostVras) {
 
-    # Defining VRA Settings to use
-    $VRASettings = @{
-    hostName       = $VRA.ESXiHostName
-    datastoreName  = $VRA.DatastoreName
-    networkName    = $VRA.PortGroupName
-    groupName      = $VRA.VRAGroupName
-    memoryInGB     = $VRA.MemoryInGB
-    vraIpAddress   = $VRA.VRAIPAddress
-    subnetMask     = $VRA.SubnetMask
-    defaultGateway = $VRA.DefaultGateway
-    }
+      # Defining VRA Settings to use
+      $VRASettings = @{
+         hostName       = $VRA.ESXiHostName
+         datastoreName  = $VRA.DatastoreName
+         networkName    = $VRA.PortGroupName
+         groupName      = $VRA.VRAGroupName
+         memoryInGB     = $VRA.MemoryInGB
+         vraIpAddress   = $VRA.VRAIPAddress
+         subnetMask     = $VRA.SubnetMask
+         defaultGateway = $VRA.DefaultGateway
+      }
 
-    # Installing VRA on each host specified in the imported CSV file using defined settings
-    Install-ZertoVra @VRASettings
+      # Installing VRA on each host specified in the imported CSV file using defined settings
+      Install-ZertoVra @VRASettings
 
-    }
+   }
 
 }
 
