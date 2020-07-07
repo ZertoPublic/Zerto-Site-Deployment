@@ -38,7 +38,7 @@ $ZertoServer = "GOES HERE" # Enter the hostname or IP address of your source sid
 $ZertoPort = "9669" # Only Update if using a Nonstandard port.
 
 #--------------------------------------------------------------------------------------------------------------#
-# Generating Pairing Token from Target Site
+# Applying specified license key to Zerto Virtual Manager (ZVM).
 #--------------------------------------------------------------------------------------------------------------#
 
 # Establishes a connection to a ZVM
