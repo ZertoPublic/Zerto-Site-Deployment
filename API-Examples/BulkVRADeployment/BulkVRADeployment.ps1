@@ -2,16 +2,16 @@
 
 <#
 .SYNOPSIS
-   This script automates the deployment of VRAs for the hosts in the specified CSV file using the Zerto API to complete the process
+    This script automates the deployment of VRAs for the hosts in the specified CSV file using the Zerto API to complete the process
 .DESCRIPTION
-   The script requires a user to prepopulate the VRADeploymentESXiHosts.csv with the necessary vCenter resources the VRA will utilize including the ESXi Host, Datastore,
-   vSwitch / vDS Port Group, Memory, IP Address, Gateway, and Subnet for the VRA. These vCenter resources will then be utilized
+    The script requires a user to prepopulate the BulkVRADeployment.csv with the necessary vCenter resources the VRA will utilize including the ESXi Host, Datastore, vSwitch / vDS Port Group, Memory, IP Address, Gateway, and Subnet for the VRA. These vCenter resources will then be utilized.
 .VERSION
-   Applicable versions of Zerto Products script has been tested on.  Unless specified, all scripts in repository will be 5.0u3 and later.  If you have tested the script on multiple
-   versions of the Zerto product, specify them here.  If this script is for a specific version or previous version of a Zerto product, note that here and specify that version
-   in the script filename.  If possible, note the changes required for that specific version.
+    Applicable versions of Zerto Products script has been tested on.
+    - Zerto 6.5+ on vSphere 6.7+
+    - Zerto 7.5+ on vSphere 7.0+
+    Note: For more information on supported versions of Zerto with specific hypervisor versions, see the Zerto Interoperability Matrix (http://s3.amazonaws.com/zertodownload_docs/Latest/Zerto%20Virtual%20Replication%20Operability%20Matrix.pdf)
 .LEGAL
-   Legal Disclaimer:
+    Legal Disclaimer:
 
 ----------------------
 This script is an example script and is not supported under any Zerto support program or service.

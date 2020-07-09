@@ -7,8 +7,10 @@
 .DESCRIPTION
    This script requires some variables to be set for the Source and Target ZVM Hostname/IP address, Source and Target ZVM TCP Port (if not the default), Pairing Port (if not the default), as well as authentication info.
 .VERSION
-   Applicable versions of Zerto Products script has been tested on:
-   Zerto Version 7.5 and above.
+   Applicable versions of Zerto Products script has been tested on.
+   - Zerto 7.5+ on vSphere 6.7+
+   Note: For more information on supported versions of Zerto with specific hypervisor versions, see the Zerto Interoperability Matrix (http://s3.amazonaws.com/zertodownload_docs/Latest/Zerto%20Virtual%20Replication%20Operability%20Matrix.pdf)
+
 .LEGAL
    Legal Disclaimer:
 

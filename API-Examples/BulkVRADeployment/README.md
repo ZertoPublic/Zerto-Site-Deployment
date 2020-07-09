@@ -7,9 +7,11 @@ This script automates the deployments of VRAs based on the hosts in the specifie
 Environment Requirements:
 
 - PowerShell Core
-- Zerto 6.5+
-- vSphere 5.5+
 - Network access to the Zerto Virtual Manager (ZVM), use the target site ZVM for storage info to be populated
+- Applicable versions of Zerto Products script has been tested on
+   - Zerto 6.5+ on vSphere 6.7+
+   - Zerto 7.5+ on vSphere 7.0+
+   Note: For more information on supported versions of Zerto with specific hypervisor versions, see the Zerto Interoperability Matrix (http://s3.amazonaws.com/zertodownload_docs/Latest/Zerto%20Virtual%20Replication%20Operability%20Matrix.pdf)
 
 Script Requirements:
 
