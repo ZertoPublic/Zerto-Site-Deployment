@@ -8,7 +8,7 @@ Leverages the Zerto REST APIs and PowerShell Core.
 
 ## ***APIWrapper-Examples***
 
-Leverages the ZertoAPIWrapper and PowerShell Core.
+Leverages the ZertoAPIWrapper and Windows PowerShell or PowerShell Core.
 
 
 

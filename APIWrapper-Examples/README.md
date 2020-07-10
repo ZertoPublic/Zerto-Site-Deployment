@@ -1,6 +1,6 @@
 # Zerto Deployment Scripts
 
-This repository consists of the following example scripts designed to deploy and configure a new Zerto installation. These examples leverage the ZertoAPIWrapper and PowerShell Core.
+This repository consists of the following example scripts designed to deploy and configure a new Zerto installation. These examples leverage the ZertoAPIWrapper and Windows PowerShell/PowerShell Core.
 
 
 ## LicenseZVM-Wrapper.ps1
@@ -10,7 +10,7 @@ This script will apply a specified license key to a Zerto Virtual Manager (ZVM).
 
 Environment Requirements:
 
-- PowerShell Core
+- Windows PowerShell or PowerShell Core
 - Zerto API Wrapper PowerShell Module (https://github.com/ZertoPublic/ZertoApiWrapper)
 - Applicable versions of Zerto Products script has been tested on.
    - Zerto 6.5+ on vSphere 6.7+
@@ -40,7 +40,7 @@ This script will pair Source and Target Zerto Virtual Managers (ZVMs).
 
 Environment Requirements:
 
-- PowerShell Core
+- Windows PowerShell or PowerShell Core
 - Zerto API Wrapper PowerShell Module (https://github.com/ZertoPublic/ZertoApiWrapper)
 - Applicable versions of Zerto Products script has been tested on.
    - Zerto 7.5+ on vSphere 6.7+
@@ -64,13 +64,13 @@ Once the necessary requirements have been completed select an appropriate host t
 
 ## BulkVRADeployment-Wrapper.ps1
 
-This script automates the deployment of VRAs based on the hosts in the specified CSV file using the Zerto API. The CSV is required to be filled out   before running the script in order to utilize the necessary vCenter resources when creating the VRAs. Please note this script is intended to be used only with ESXi hosts 5.5 and newer. The script doesn't call for a host root password and is instead using the Zerto VRA VIB deployment that was introduced in ZVR 4.5.
+This script automates the deployment of VRAs based on the hosts in the specified CSV file using the Zerto API. The CSV is required to be filled out before running the script in order to utilize the necessary vCenter resources when creating the VRAs. Please note this script is intended to be used only with ESXi hosts 5.5 and newer. The script doesn't call for a host root password and is instead using the Zerto VRA VIB deployment that was introduced in ZVR 4.5.
 
 ### Prerequisites
 
 Environment Requirements:
 
-- PowerShell Core
+- Windows PowerShell or PowerShell Core
 - Zerto API Wrapper PowerShell Module (https://github.com/ZertoPublic/ZertoApiWrapper)
 - Network access to the Zerto Virtual Manager(s) (ZVMs), use the target site ZVM for storage info to be populated
 - Applicable versions of Zerto Products script has been tested on.

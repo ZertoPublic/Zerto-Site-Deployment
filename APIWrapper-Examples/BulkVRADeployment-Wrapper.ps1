@@ -1,4 +1,3 @@
-#Requires -PSEdition Core
 #Requires -Module ZertoApiWrapper
 
 <#
@@ -26,7 +25,7 @@ performance of the sample scripts and documentation remains with you.
 #>
 
 ###################################################################################################################
-#Any section containing a "GOES HERE" should be replaced and populated with your site information for the script to work.#
+# Any section containing a "GOES HERE" should be replaced with your site information for the script to function
 ###################################################################################################################
 
 #--------------------------------------------------------------------------------------------------------------#
